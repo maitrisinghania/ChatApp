@@ -3,9 +3,11 @@ import { useContext } from "react";
 import { Dialog, Typography, List, ListItem, Box, styled } from "@mui/material";
 import { qrCodeImage } from "../../constants/data";
 import { AccountContext } from "../../context/AccountProvider";
+import { addUser } from "../../service/api";
 
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
+
 
 
 const dialogStyle = {
@@ -21,6 +23,10 @@ const dialogStyle = {
 
 const Component = styled(Box)`
     display: flex;
+    overflow-y: auto;
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
 `;
 
 const Container = styled(Box)`
@@ -55,9 +61,10 @@ const LoginDialog = () => {
 
     const { setAccount } = useContext(AccountContext);
 
-    const onLoginSuccess = (res) => {
+    const onLoginSuccess = async (res) => {
         const decoded = jwtDecode(res.credential);
         setAccount(decoded);
+        await addUser(decoded);
 
     }
 

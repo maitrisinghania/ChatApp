@@ -1,5 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
+
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // components

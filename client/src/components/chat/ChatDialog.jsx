@@ -1,17 +1,32 @@
+import { useContext } from "react";
+
+
 import { Dialog, Box, styled } from "@mui/material";
 
+
+import { AccountContext } from "../../context/AccountProvider";
 
 //components
 import Menu from './menu/Menu';
 import EmptyChat from "./chat/EmptyChat";
+import ChatBox from "./chat/ChatBox";
 
 
 const Component = styled(Box)`
     display: flex;
+    overflow-x: auto;
+    @media (max-width: 600px) {
+        flex-direction: row;  // Stack the components vertically on smaller screens
+    }
 `;
 
 const LeftComponent = styled(Box)`
     min-width: 450px;
+    flex-shrink: 0;
+    
+    @media (max-width: 600px) {
+        min-width: 300px;
+    }
 `;
 
 const RightComponent = styled(Box)`
@@ -19,6 +34,12 @@ const RightComponent = styled(Box)`
     min-width: 300px;
     height: 100%;
     border-left: 1px solid rgba(0, 0, 0, 0.14);
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+        width: 100%;  // Take full width on small screens
+        border-left: none;  // Remove border for a cleaner look on small screens
+    }
 `
 
 const dialogStyle = {
@@ -33,19 +54,27 @@ const dialogStyle = {
 };
 
 const ChatDialog = () => {
+
+    const { person } = useContext(AccountContext);
+
+
+
+
     return (
-        <Dialog open = {true}
-        PaperProps = {{sx: dialogStyle}}
-        hideBackdrop = {true}
-        maxWidth = {'md'}
+        <Dialog open={true}
+            PaperProps={{ sx: dialogStyle }}
+            hideBackdrop={true}
+            maxWidth={'md'}
         >
             <Component>
+
                 <LeftComponent>
                     <Menu />
                 </LeftComponent>
 
+
                 <RightComponent>
-                    <EmptyChat />
+                    {Object.keys(person).length ? <ChatBox /> : <EmptyChat />}
                 </RightComponent>
             </Component>
 
